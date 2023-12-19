@@ -1,0 +1,13 @@
+.{
+    .name = "libgifsicle",
+    .version = "1.94.0+x",
+    .paths = .{
+        "build.zig",
+        "build.zig.zon",
+        "winconf.h.in",
+        "COPYING",
+        "README.md",
+        "src",
+        "include",
+    },
+}
