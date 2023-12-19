@@ -1,0 +1,47 @@
+#cmakedefine01 GIF_ALLOCATOR_DEFINED
+#cmakedefine01 HAVE_INT64_T
+#cmakedefine HAVE_MKSTEMP
+#cmakedefine01 HAVE_POW
+#cmakedefine01 HAVE_STRERROR
+#cmakedefine01 HAVE_STRTOUL
+#cmakedefine01 HAVE_UINT64_T
+#cmakedefine01 HAVE_UINTPTR_T
+#cmakedefine OUTPUT_GIF_TO_TERMINAL
+#cmakedefine X_DISPLAY_MISSING
+#cmakedefine01 ENABLE_THREADS
+#cmakedefine01 HAVE_SIMD
+#cmakedefine01 HAVE_VECTOR_SIZE_VECTOR_TYPES
+#cmakedefine01 HAVE___BUILTIN_SHUFFLEVECTOR
+#cmakedefine01 HAVE___SYNC_ADD_AND_FETCH
+
+#cmakedefine01 HAVE_STDINT_H
+#cmakedefine01 HAVE_INTTYPES_H
+#cmakedefine01 HAVE_SYS_STAT_H
+#cmakedefine01 HAVE_SYS_TYPES_H
+#cmakedefine01 HAVE_UNISTD_H
+
+#define SIZEOF_FLOAT @SIZEOF_FLOAT@
+#define SIZEOF_UNSIGNED_INT @SIZEOF_UNSIGNED_INT@
+#define SIZEOF_VOID_P @SIZEOF_VOID_P@
+#define SIZEOF_UNSIGNED_LONG @SIZEOF_UNSIGNED_LONG@
+
+#define RANDOM @RANDOM@
+#define Gif_Free @GIF_FREE@
+
+#define PATHNAME_SEPARATOR '@PATHNAME_SEPARATOR@'
+
+#if @IS_WINDOWS@ // is windows
+#define isatty _isatty
+#define snprintf _snprintf
+
+// windows needs these 2 for files
+#include <fcntl.h>
+#include <io.h>
+#endif // IS_WINDOWS
+
+// // include stdint if it say to include it and not on windows
+// #if @HAVE_STDINT_H@ && !@IS_WINDOWS@
+// #include <stdint.h>
+// #endif // @HAVE_STDINT_H@ && !@IS_WINDOWS@
+
+#define VERSION "@VERSION@"

@@ -28,3 +28,6 @@ stamp-h*
 ungifsicle-*.rpm
 ungifsicle-*.tar.gz
 compile
+
+/zig-out
+/zig-cache
