@@ -9,18 +9,19 @@ pub fn build(b: *std.Build) !void {
         .target = target,
         .optimize = optimize,
         .link_libc = true,
+        .pic = true,
     });
-    lib.force_pic = true;
+    // lib.force_pic = true;
 
     lib.addIncludePath(.{ .path = "include" });
     // lib.addIncludePath(.{ .path = "src" });
 
     const version = "1.94-zig"; // TODO: import version
 
-    const t = lib.target;
+    const t = lib.rootModuleTarget();
 
-    const is32Bit = t.toTarget().ptrBitWidth() == 32;
-    const isWindows = t.isWindows();
+    const is32Bit = t.ptrBitWidth() == 32;
+    const isWindows = t.os.tag == .windows;
 
     const terminalAvailable = true;
 
@@ -63,12 +64,12 @@ pub fn build(b: *std.Build) !void {
 
     lib.defineCMacro("HAVE_CONFIG_H", "1");
 
-    lib.installHeader("src/gifsicle.h", "gifsicle.h");
-    lib.installHeadersDirectory("include", ".");
+    lib.installHeader(b.path("src/gifsicle.h"), "gifsicle.h");
+    lib.installHeadersDirectory(b.path("include"), ".", .{});
 
     lib.addConfigHeader(config_h);
-    lib.installConfigHeader(config_h, .{});
-    lib.addCSourceFiles(&gifsicle_sources, gifsicle_cflags);
+    lib.installConfigHeader(config_h);
+    lib.addCSourceFiles(.{ .files = &gifsicle_sources, .flags = gifsicle_cflags });
     b.installArtifact(lib);
 
     ////
@@ -91,7 +92,7 @@ pub fn build(b: *std.Build) !void {
         .link_libc = true,
     });
     gifview.linkLibrary(lib);
-    gifview.addCSourceFiles(&gifview_sources, &.{});
+    gifview.addCSourceFiles(.{ .files = &gifview_sources });
     gifview.linkSystemLibrary2("X11", .{});
     gifview.defineCMacro("HAVE_CONFIG_H", "1");
 
@@ -105,7 +106,7 @@ pub fn build(b: *std.Build) !void {
     gifdiff.addCSourceFile(.{ .file = .{ .path = "src/gifdiff.c" }, .flags = &.{} });
 
     b.installArtifact(gifsicle);
-    if (!t.isWindows()) b.installArtifact(gifview);
+    if (!isWindows) b.installArtifact(gifview);
     b.installArtifact(gifdiff);
 }
 
