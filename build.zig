@@ -13,7 +13,7 @@ pub fn build(b: *std.Build) !void {
     });
     // lib.force_pic = true;
 
-    lib.addIncludePath(.{ .path = "include" });
+    lib.addIncludePath(b.path("include"));
     // lib.addIncludePath(.{ .path = "src" });
 
     const version = "1.94-zig"; // TODO: import version
@@ -26,7 +26,7 @@ pub fn build(b: *std.Build) !void {
     const terminalAvailable = true;
 
     // std.Target.x86.featureSetHas(t.getCpuFeatures(), .simd);
-    const config_h = b.addConfigHeader(.{ .style = .{ .cmake = .{ .path = "winconf.h.in" } }, .include_path = "config.h" }, .{
+    const config_h = b.addConfigHeader(.{ .style = .{ .cmake = b.path("winconf.h.in") }, .include_path = "config.h" }, .{
         .GIF_ALLOCATOR_DEFINED = 1,
         .HAVE_INT64_T = 1,
         .X_DISPLAY_MISSING = @intFromBool(isWindows),
@@ -81,7 +81,7 @@ pub fn build(b: *std.Build) !void {
         .link_libc = true,
     });
     gifsicle.linkLibrary(lib);
-    gifsicle.addCSourceFile(.{ .file = .{ .path = "src/gifsicle.c" }, .flags = &.{} });
+    gifsicle.addCSourceFile(.{ .file = b.path("src/gifsicle.c"), .flags = &.{} });
 
     // gifsicle.defineCMacro("main", "gifsicle_main");
 
@@ -103,7 +103,7 @@ pub fn build(b: *std.Build) !void {
         .link_libc = true,
     });
     gifdiff.linkLibrary(lib);
-    gifdiff.addCSourceFile(.{ .file = .{ .path = "src/gifdiff.c" }, .flags = &.{} });
+    gifdiff.addCSourceFile(.{ .file = b.path("src/gifdiff.c"), .flags = &.{} });
 
     b.installArtifact(gifsicle);
     if (!isWindows) b.installArtifact(gifview);
